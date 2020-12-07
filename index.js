@@ -22,6 +22,15 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+app.get('/test', (req, res) => {
+    res.send({
+        test: "string",
+        data: {
+            look: 'it is working'
+        }
+    })
+})
+
 app.post('/', async (req, res) => {
     const username = req.body.username.trim();
     const token = req.body['g-recaptcha-response'];
