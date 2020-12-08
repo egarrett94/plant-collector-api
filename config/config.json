@@ -1,0 +1,17 @@
+{
+  "development": {
+      "database": "plants_development",
+      "dialect": "postgres"
+  },
+  "test": {
+      "database": "plants_test",
+      "dialect": "postgres"
+  },
+  "production": {
+      "use_env_variable": "DATABASE_URL",
+      "dialect": "postgres",
+      "dialectOptions": {
+          "ssl": true
+      }
+  }
+}
