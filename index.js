@@ -5,6 +5,10 @@ const path = require('path');
 const favicon = require('serve-favicon');
 const ejsLayouts = require('express-ejs-layouts');
 const bodyparser = require('body-parser');
+const session = require('express-session'); 
+const flash = require('connect-flash');
+const passport = require('./config/passportConfig');
+const isLoggedIn = require('./middleware/isLoggedIn');
 
 const app = express();
 
@@ -18,6 +22,23 @@ app.use(bodyparser.urlencoded({
 }));
 app.use(bodyparser.json());
 
+app.use(session({
+	secret: process.env.SESSION_SECRET,
+	resave: false,
+	saveUninitialized: true
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use((req,res,next) => {
+	//before every route, attach the flash messages
+	//and current user to res.locals
+	res.locals.alerts = req.flash();
+	res.locals.currentUser = req.user;
+	next();
+});
+
 app.get('/', (req, res) => {
     res.render('index');
 })
@@ -27,6 +48,16 @@ app.get('/test', (req, res) => {
         test: "string",
         data: {
             look: 'it is working'
+        }
+    })
+})
+
+app.get('/session-test', isLoggedIn, (req, res) => {
+    res.send({
+        test: "string",
+        data: {
+            look: 'it is working',
+            isLoggedIn: isLoggedIn
         }
     })
 })
