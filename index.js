@@ -63,6 +63,8 @@ app.get('/success', async (req, res) => {
 
 app.get('/failure', (req, res) => res.render('failure', { error: errorMessages[req.query.error] }))
 
+app.use('/auth', require('./controllers/auth'));
+
 var server = app.listen(process.env.PORT || 3000);
 
 module.exports = server;
