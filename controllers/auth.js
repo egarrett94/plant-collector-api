@@ -43,11 +43,12 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
+        console.log({err, user, info})
         if (err) { return next(err); }
         if (!user) { return res.send("could not log you in!"); }
         req.logIn(user, (err) => {
-          if (err) { return next(err); }
-          return res.send(`logged ${user.username} in`);
+            if (err) { return next(err); }
+            return res.send(`logged ${user.username} in`);
         });
       })(req, res, next);
 });

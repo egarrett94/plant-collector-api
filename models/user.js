@@ -17,7 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     validPassword(pendingPassword) {
-      bcrypt.compareSync(pendingPassword, this.password);
+      console.log('pending', pendingPassword)
+      console.log('this.password', this.password)
+      return bcrypt.compareSync(pendingPassword, this.password);
     } 
 
     //this will be used in the routes 

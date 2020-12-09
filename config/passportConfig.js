@@ -12,29 +12,24 @@ passport.serializeUser((user, cb) => {
 // Passport "deserializes" objects by taking the user's
 // serialization id and looking it up in the database.
 passport.deserializeUser((id, cb) => 
-	db.user.findById(id).then(user => {
+	db.User.findOne({
+        where: { id }
+    }).then(user => {
 		cb(null, user);
-	}).catch(cb));
+    }).catch(cb));
 
 // Set up the local auth strategy 
 passport.use(new LocalStrategy({
 	usernameField: 'username',
 	passwordField: 'password'
 }, (username, password, cb) => {
-	db.User.find({
+	db.User.findOne({
 		where: { username }
 	}).then(user => {
-		if(!user || !user.validPassword(password)) {
-			cb(null, false);
-		} else {
-			//if successfully log in, returns the user
-			//that has logged in. this is what will be 
-			//used to store in our session
-			cb(null, user);
-		};
-		//if any error, then call callback which will
-		//push the program to the next thing that the 
-		//app is supposed to do
+        // if successfully log in, returns and stores the user that has logged in in the session
+        !user || !user.validPassword(password) ? cb(null, false) : cb(null, user)
+        
+        // if error, call callback which moves the app forward
 	}).catch(cb);
 }));
 
